@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Celebrate Together</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            background: linear-gradient(to bottom, #ffecd2, #fcb69f);
+            color: #333;
+        }
+
+        header {
+            padding: 20px;
+            background: #ff6f61;
+            color: white;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+            font-size: 2rem;
+        }
+
+        .intro {
+            padding: 20px;
+            font-size: 1.5rem;
+        }
+
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 20px;
+        }
+
+        .folder {
+            margin: 15px;
+            border: 2px solid #ff6f61;
+            border-radius: 10px;
+            overflow: hidden;
+            width: 250px;
+            background: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+
+        .folder:hover {
+            transform: scale(1.05);
+        }
+
+        .folder img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .folder h3 {
+            background: #ff6f61;
+            color: white;
+            margin: 0;
+            padding: 10px;
+            font-size: 1.2rem;
+        }
+
+        .quotes {
+            margin: 30px auto;
+            font-style: italic;
+            font-size: 1.2rem;
+            color: #555;
+            max-width: 800px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .timeline {
+            margin: 40px auto;
+            max-width: 800px;
+            text-align: left;
+        }
+
+        .timeline h2 {
+            text-align: center;
+            color: #ff6f61;
+        }
+
+        .event {
+            margin: 20px 0;
+            padding: 10px;
+            border-left: 4px solid #ff6f61;
+            background: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .event h3 {
+            margin: 0;
+            font-size: 1.2rem;
+            color: #ff6f61;
+        }
+
+        .event p {
+            margin: 5px 0 0;
+            font-size: 1rem;
+        }
+
+        footer {
+            padding: 10px;
+            background: #333;
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .footer-links a {
+            color: #ff6f61;
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+
+        #countdown {
+            font-size: 2rem;
+            margin: 30px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            color: #ff6f61;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            display: inline-block;
+        }
+
+        .countdown-info {
+            font-size: 1.2rem;
+            color: #333;
+        }
+
+        /* Pop-up styles */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #ff6f61;
+            color: white;
+            font-size: 1.5rem;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+
+        .popup.show {
+            display: block;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0, 0, 0);
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+
+        .modal-content {
+            margin: 15% auto;
+            display: block;
+            width: 80%;
+            max-width: 700px;
+        }
+
+        #modal-image {
+            width: 100%;
+        }
+
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Slideshow styles */
+        .slideshow-container {
+            max-width: 1000px;
+            position: relative;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .mySlides {
+            display: none;
+        }
+
+        .slideshow-img {
+            width: 100%;
+            border-radius: 10px;
+        }
+
+        .prev, .next {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            width: auto;
+            padding: 16px;
+            margin-top: -22px;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            transition: 0.3s ease;
+            border-radius: 0 3px 3px 0;
+            user-select: none;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .next {
+            right: 0;
+            border-radius: 3px 0 0 3px;
+        }
+
+        .prev:hover, .next:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        Celebrate Our Moments Together ❤️
+    </header>
+
+    <div class="intro">
+        <p>Every memory with you is a treasure. Here's a glimpse of the beautiful times we've spent together.</p>
+    </div>
+<br><h2>Play this Audio....learn the lyrics 'BABY'</h2><br>
+    <audio controls autoplay loop>
+        <source src="Baby.mp3" type="audio/mpeg">
+        Your browser does not support the audio tag.
+    </audio><br><br><br>
+<h2>Just a famous Quote from a not so famous 'SHAYAR'</h2>
+
+    <div class="quotes">
+        "Nothing is my in hands, Its just you, me and our dreamy lands" – SP
+    </div>
+
+    <!-- Countdown Section -->
+    <div>
+        <div id="countdown" class="countdown-info">
+            Countdown for 28th April! 💖
+            <div id="countdown-timer">Loading...</div>
+        </div>
+    </div>
+
+<div style="text-align: center; margin-top: 50px;">
+    <button id="roseday" onclick="window.location.href='roseday.html'" style="background-color: #ff4d88; color: white; padding: 20px 50px; font-size: 22px; border-radius: 25px; border: none; cursor: pointer; margin: 15px 0; transition: transform 0.3s, background-color 0.3s;">
+        Rose Day (7th Feb)
+    </button><br><br>
+    <button id="proposeday" onclick="window.location.href='proposeday.html'" style="background-color: #ff3399; color: white; padding: 20px 50px; font-size: 22px; border-radius: 25px; border: none; cursor: pointer; margin: 15px 0; transition: transform 0.3s, background-color 0.3s;">
+        Propose Day (8th Feb)
+    </button><br><br>
+    <button id="chocolateday" onclick="window.location.href='chocolateday.html'" style="background-color: #ff66b3; color: white; padding: 20px 50px; font-size: 22px; border-radius: 25px; border: none; cursor: pointer; margin: 15px 0; transition: transform 0.3s, background-color 0.3s;">
+        Chocolate Day (9th Feb)
+    </button><br><br>
+    <button id="teddybearday" onclick="window.location.href='teddybearday.html'" style="background-color: #ff99cc; color: white; padding: 20px 50px; font-size: 22px; border-radius: 25px; border: none; cursor: pointer; margin: 15px 0; transition: transform 0.3s, background-color 0.3s;">
+        Teddy Day (10th Feb)
+    </button><br><br>
+    <button id="hugday" onclick="window.location.href='hugday.html'" style="background-color: #ffccff; color: white; padding: 20px 50px; font-size: 22px; border-radius: 25px; border: none; cursor: pointer; margin: 15px 0; transition: transform 0.3s, background-color 0.3s;">
+        Hug Day (11th Feb)
+    </button><br><br>
+    <button id="kissday" onclick="window.location.href='kissday.html'" style="background-color: #ffb3e6; color: white; padding: 20px 50px; font-size: 22px; border-radius: 25px; border: none; cursor: pointer; margin: 15px 0; transition: transform 0.3s, background-color 0.3s;">
+        Kiss Day (12th Feb)
+    </button><br><br>
+    <button id="rosequiltday" onclick="window.location.href='rosequiltday.html'" style="background-color: #ff66cc; color: white; padding: 20px 50px; font-size: 22px; border-radius: 25px; border: none; cursor: pointer; margin: 15px 0; transition: transform 0.3s, background-color 0.3s;">
+        Promise Day (13th Feb)
+    </button><br><br>
+    <button id="valentinesday" onclick="window.location.href='valentinesday.html'" style="background-color: #ff3399; color: white; padding: 20px 50px; font-size: 22px; border-radius: 25px; border: none; cursor: pointer; margin: 15px 0; transition: transform 0.3s, background-color 0.3s;">
+        Valentine's Day (14th Feb)
+    </button>
+</div>
+
+<script>
+    // Get today's date
+    var today = new Date();
+    var dayOfMonth = today.getDate();
+
+    // Disable buttons before their respective date
+    function disableButton(id) {
+        var button = document.getElementById(id);
+        button.disabled = true;
+        button.style.cursor = 'not-allowed';
+        button.style.backgroundColor = '#d3d3d3'; // Gray out the button
+    }
+
+    // Show only the button for the current date
+    if (dayOfMonth < 7) {
+        disableButton('roseday');
+    } else if (dayOfMonth === 7) {
+        document.getElementById('roseday').style.pointerEvents = 'auto';
+    }
+
+    if (dayOfMonth < 8) {
+        disableButton('proposeday');
+    } else if (dayOfMonth === 8) {
+        document.getElementById('proposeday').style.pointerEvents = 'auto';
+    }
+
+    if (dayOfMonth < 9) {
+        disableButton('chocolateday');
+    } else if (dayOfMonth === 9) {
+        document.getElementById('chocolateday').style.pointerEvents = 'auto';
+    }
+
+    if (dayOfMonth < 10) {
+        disableButton('teddybearday');
+    } else if (dayOfMonth === 10) {
+        document.getElementById('teddybearday').style.pointerEvents = 'auto';
+    }
+
+    if (dayOfMonth < 11) {
+        disableButton('hugday');
+    } else if (dayOfMonth === 11) {
+        document.getElementById('hugday').style.pointerEvents = 'auto';
+    }
+
+    if (dayOfMonth < 12) {
+        disableButton('kissday');
+    } else if (dayOfMonth === 12) {
+        document.getElementById('kissday').style.pointerEvents = 'auto';
+    }
+
+    if (dayOfMonth < 13) {
+        disableButton('rosequiltday');
+    } else if (dayOfMonth === 13) {
+        document.getElementById('rosequiltday').style.pointerEvents = 'auto';
+    }
+
+    if (dayOfMonth < 14) {
+        disableButton('valentinesday');
+    } else if (dayOfMonth === 14) {
+        document.getElementById('valentinesday').style.pointerEvents = 'auto';
+    }
+</script>
+
+<style>
+    button:hover {
+        background-color: #d63384;
+        transform: scale(1.1);
+    }
+
+    button:active {
+        transform: scale(0.95);
+        background-color: #c13563;
+    }
+
+    button[disabled] {
+        background-color: #d3d3d3;
+        cursor: not-allowed;
+    }
+</style>
+
+
+
+<br><br><br><br>
+<h2 style="text-align: center; margin-top: 20px;">CLICK ON BELOW BUTTON TO MESSAGE ME! (8th Feb)</h2>
+<button class="fancy-button" onclick="window.open('https://waX.me/+918767585051?text=LOVE_YOU_SHRAVU', '_blank')">
+    <img src="WA.jpg" alt="Click Me">
+</button>
+
+<style>
+    .fancy-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        outline: none;
+        padding: 0;
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+        display: block;
+        margin: 20px auto;
+    }
+
+    .fancy-button img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+
+    .fancy-button:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 25px rgba(255, 0, 0, 0.8);
+    }
+
+    .fancy-button:active {
+        transform: scale(0.9);
+    }
+</style>
+<br>
+<BR><BR><br>
+
+
+
+    <!-- Slideshow Section -->
+<h1 style="text-align: center; margin-top: 20px;">Just a normal Slideshow... (9th Feb)</h1>
+    <div class="slideshow-container">
+        <div class="mySlides fade">
+            <img src="IMG4x.jpg" class="slideshow-img" alt="Wait for it, cause they are legendary" style="width: 10%; width: 50%; height: auto;">
+        </div>
+        <div class="mySlides fade">
+            <img src="IMG1x.jpg" class="slideshow-img" alt="Wait for it, cause they are legendary" style="width: 10%; width: 50%; height: auto;">
+        </div>
+        <div class="mySlides fade">
+            <img src="IMG2x.jpg" class="slideshow-img" alt="Wait for it, cause they are legendary" style="width: 10%; width: 50%; height: auto;">
+        </div>
+        <div class="mySlides fade">
+            <img src="IMG3x.jpg" class="slideshow-img" alt="Wait for it, cause they are legendary" style="width: 10%; width: 50%; height: auto;">
+        </div>
+
+           </div><br>
+
+<h2 style="text-align: center; margin-top: 20px;">CLICK ON RIZZ BUTTON TO GET RIZZED! (8th Feb)</h2>
+<button class="fancy-button" onclick="window.location.href='https://genxshravanop.github.io/rizzmanu/'">
+    <img src="rizz.jpg" alt="Click Me">
+</button>
+
+<style>
+    .fancy-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        outline: none;
+        padding: 0;
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+        display: block;
+        margin: 20px auto;
+    }
+
+    .fancy-button img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+
+    .fancy-button:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 25px rgba(255, 0, 0, 0.8);
+    }
+
+    .fancy-button:active {
+        transform: scale(0.9);
+    }
+</style>
+<br>
+
+<div class="video-slideshow-section">
+    <h2 style="text-align: center; margin-top: 20px;">Some of Our Special Moments (Click Next) (10th Feb)</h2>
+    <div class="video-slideshow">
+        <video id="videoSlide" width="30%" controls autoplay alt="Wait for it, cause they are legendary" loop muted style="display: block; margin: 0 auto;">
+            <source src="path-to-video1.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="video-controls" style="text-align: center; margin-top: 10px;">
+            <button onclick="prevVideo()">Previous</button>
+            <button onclick="nextVideo()">Next</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Array of video sources
+    const videoSources = [
+        "Homex.mp4",
+        "Timepassx.mp4",
+        "Ye Go Yex.mp4",
+        "Kissx.mp4"
+    ];
+
+    let currentVideoIndex = 0;
+    const videoElement = document.getElementById("videoSlide");
+
+    // Function to play the previous video
+    function prevVideo() {
+        currentVideoIndex = (currentVideoIndex - 1 + videoSources.length) % videoSources.length;
+        updateVideo();
+    }
+
+    // Function to play the next video
+    function nextVideo() {
+        currentVideoIndex = (currentVideoIndex + 1) % videoSources.length;
+        updateVideo();
+    }
+
+    // Update the video source
+    function updateVideo() {
+        videoElement.src = videoSources[currentVideoIndex];
+        videoElement.play();
+    }
+</script>
+
+
+    <div class="timeline">
+        <h2>Our Journey (11th Feb)</h2>
+        <div class="event">
+            <h3>Wait for it</h3>
+            <p>LEGEN.....DARY</p>
+        </div>
+        <div class="event">
+            <h3>Wait for it</h3>
+            <p>LEGEN.....DARY</p>
+        </div>
+<div class="event">
+            <h3>Wait for it</h3>
+            <p>LEGEN.....DARY</p>
+        </div>
+        <div class="event">
+            <h3>Wait for it</h3>
+            <p>LEGEN.....DARY</p>
+        </div>
+<div class="event">
+            <h3>Wait for it</h3>
+            <p>LEGEN.....DARY</p>
+        </div>
+<div class="event">
+            <h3>Wait for it</h3>
+            <p>LEGEN.....DARY</p>
+        </div>
+    </div><br><br><br>
+
+<h1 style="text-align: center; margin-top: 20px;">Collages📷🖼️ (12th Feb)</h1><br>
+
+  <div class="gallery">
+    <div class="folder" onclick="openModal('folder1')">
+        <img src="Early DatesX.jpg" alt="Date 1" style="width: 100%; height: auto;">
+        <h3>WAIT</h3>
+    </div>
+    <div class="folder" onclick="openModal('folder2')">
+        <img src="College Sneak Out DatesX.jpg" alt="Date 2" style="width: 100%; height: auto;">
+        <h3>FOR</h3>
+    </div>
+    <div class="folder" onclick="openModal('folder3')">
+        <img src="Garba DateX.jpg" alt="Date 3" style="width: 100%; height: auto;">
+        <h3>IT</h3>
+    </div>
+    <div class="folder" onclick="openModal('folder4')">
+        <img src="Internship DatesX.jpg" alt="Date 4" style="width: 100%; height: auto;">
+        <h3>LEGEN...</h3>
+    </div>
+    <div class="folder" onclick="openModal('folder5')">
+        <img src="Christmas DateX.jpg" alt="Date 5" style="width: 100%; height: auto;">
+        <h3>...DARY</h3>
+    </div>
+    <div class="folder" onclick="openModal('folder6')">
+        <img src="New Year DateX.jpg" alt="Date 6" style="width: 100%; height: auto;">
+        <h3>"LEGENDARY"</h3>
+    </div>
+</div>
+<div id="myModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); z-index: 9999; justify-content: center; align-items: center;">
+    <span onclick="closeModal()" style="position: absolute; top: 10px; right: 10px; color: white; font-size: 24px; cursor: pointer;">&times;</span>
+    <img id="modal-image" style="max-width: 90%; max-height: 90%; margin: auto; display: block; border-radius: 10px; box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.5);">
+</div>
+
+
+    <!-- Pop-up message -->
+    <div class="popup" id="valentinePopup">
+        HAPPY VALENTINE'S WEEK MY VALENTINE! ❤️
+    </div>
+
+<!-- Video Section -->
+<div class="video-section">
+    <h2>Our Special Moments in Motion (13th Feb)</h2>
+    <div class="video-container">
+        <!-- Embed Video 1 -->
+       <iframe width="878" height="494" src="https://www.youtube.com/embed/2rVbM7sqrtsX" title="BIRTHDAY!" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+        <!-- Embed Video 2 -->
+        <iframe width="346" height="614" src="https://www.youtube.com/embed/lwdmRrBseXwX" title="Christmas Date!" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+        <!-- Embed Video 3 -->
+       <iframe width="346" height="614" src="https://www.youtube.com/embed/9VXvy9vil2wX" title="Exams" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+        <!-- Embed Video 4 -->
+        <iframe width="346" height="614" src="https://www.youtube.com/embed/LuOOQ8VWKDIX" title="Garba" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+<!-- Embed Video 4 -->
+       <iframe width="878" height="494" src="https://www.youtube.com/embed/imYX9Kk_MqgX" title="Valentine’s week" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+
+    </div>
+</div>
+<style>
+    /* Add styles for video section */
+    .video-section {
+        margin: 40px auto;
+        text-align: center;
+        max-width: 1000px;
+    }
+
+    .video-section h2 {
+        color: #ff6f61;
+        font-size: 2rem;
+        margin-bottom: 20px;
+    }
+
+    .video-container {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 20px;
+        align-items: center;
+        margin: 0 auto;
+    }
+
+    .video-container iframe {
+        width: 320px;
+        height: 180px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+</style>
+
+    <footer>
+        <div class="footer-links">
+            <a href="#">I</a>
+            <a href="#">LOVE</a>
+            <a href="#">YOU</a>
+        </div>
+        <div class="contact-info">
+            <p>MADE FOR MRUDULA - by SHRAVAN</p>
+        </div>
+    </footer>
+
+    <!-- Modal for image view -->
+    <div class="modal" id="myModal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <img class="modal-content" id="modal-image" alt="Modal Image">
+    </div>
+
+
+
+
+    <script>
+        // Countdown script
+        const countdownDate = new Date("2025-04-28 00:00:00").getTime();
+        const countdownElement = document.getElementById("countdown-timer");
+
+        setInterval(function() {
+            const now = new Date().getTime();
+            const distance = countdownDate - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            countdownElement.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+
+            if (distance < 0) {
+                clearInterval(x);
+                countdownElement.innerHTML = "The day has arrived!";
+            }
+        }, 1000);
+
+        // Pop-up functionality
+        setInterval(function() {
+            const popup = document.getElementById('valentinePopup');
+            popup.classList.add('show');
+            setTimeout(function() {
+                popup.classList.remove('show');
+            }, 5000);
+        }, 10000);
+
+        // Slideshow functionality
+        let slideIndex = 0;
+        showSlides();
+
+        function showSlides() {
+            const slides = document.getElementsByClassName("mySlides");
+            for (let i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+            }
+            slideIndex++;
+            if (slideIndex > slides.length) {
+                slideIndex = 1;
+            }
+            slides[slideIndex - 1].style.display = "block";
+            setTimeout(showSlides, 3000); // Change image every 3 seconds
+        }
+
+        function plusSlides(n) {
+            slideIndex += n;
+            if (slideIndex > slides.length) {
+                slideIndex = 1;
+            }
+            if (slideIndex < 1) {
+                slideIndex = slides.length;
+            }
+            showSlides();
+        }
+
+       function openModal(folderId) {
+    const modal = document.getElementById("myModal");
+    const modalImg = document.getElementById("modal-image");
+
+    // Define image paths for each folder
+    const folderImages = {
+        folder1: "Early Dates1.jpg",
+        folder2: "College Sneak Out Dates1.jpg",
+        folder3: "Garba Date1.jpg",
+        folder4: "Internship Dates1.jpg",
+        folder5: "Christmas Date1.jpg",
+        folder6: "New Year Date1.jpg"
+    };	
+
+    // Set the modal image source
+    if (folderImages[folderId]) {
+        modalImg.src = folderImages[folderId]; // Assign the correct image source
+        modal.style.display = "flex"; // Show the modal
+    } else {
+        console.error("Image not found for folder: " + folderId);
+    }
+}
+
+function closeModal() {
+    const modal = document.getElementById("myModal");
+    modal.style.display = "none"; // Hide the modal
+}
+
+    </script>
+</body>
+</html>
+
+
